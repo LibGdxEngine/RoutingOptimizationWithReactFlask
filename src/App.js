@@ -178,19 +178,32 @@ const App = () => {
         for (const step of steps) {
             tripInstructions += `<li>${step.maneuver.instruction}</li>`;
         }
-        instructions.innerHTML = `<p><strong>Trip duration: ${Math.floor(
+        instructions.innerHTML += `<p><strong>Trip duration: ${Math.floor(
             data.duration / 60
         )} min 🚴 </strong></p><ol>${tripInstructions}</ol>`;
+
     }
 
-    const handleRouteBtnClick = (event) => {
+    const handleRouteBtnClick = async (event) => {
+            try {
+                fetch("/points", {method: 'POST', body: selectedPoints}).then((res) =>
+                    res.json().then((data) => {
+                        // Setting a data from api
+                        console.log(data);
+                    })
+                );
+            } catch
+                (err) {
+                console.log(err.message + " Exception error");
+            }
 
-        for (let counter = 0; counter < selectedPoints.length; counter += 1) {
-            const coords = [...selectedPoints[counter]];
-            console.log(coords);
-            getRoute(coords);
+            for (let counter = 0; counter < selectedPoints.length; counter += 1) {
+                const coords = [...selectedPoints[counter]];
+                console.log(coords);
+                getRoute(coords);
+            }
         }
-    };
+    ;
 
     return (
         <>
