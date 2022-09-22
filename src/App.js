@@ -13,7 +13,8 @@ const App = () => {
     const [zoom, setZoom] = useState(12);
     const start = [lng, lat];
     const [selectedPoints, setSelectedPoints] = useState([]);
-
+    const redColor = "#f30";
+    const greenColor = "#2dc506";
     useEffect(() => {
         if (map.current) return; // initialize map only once
         map.current = new mapboxgl.Map({
@@ -31,7 +32,7 @@ const App = () => {
         map.current.on('load', () => {
             // make an initial directions request that
             // starts and ends at the same location
-            getRoute(start);
+            // getRoute(start);
 
             // Add starting point to the map
             map.current.addLayer({
@@ -85,7 +86,7 @@ const App = () => {
                     },
                     paint: {
                         'circle-radius': 10,
-                        'circle-color': '#f30'
+                        'circle-color': '#2dc506'
                     }
                 });
             });
@@ -97,6 +98,13 @@ const App = () => {
         const handleMapClick = (event) => {
             const coords = Object.keys(event.lngLat).map((key) => event.lngLat[key]);
             setSelectedPoints([...selectedPoints, coords]);
+            let pointColor = "";
+            if (selectedPoints.length % 2 === 0) {
+                pointColor = greenColor;
+            } else {
+                pointColor = redColor;
+            }
+
             map.current.addLayer({
                 id: 'end' + Math.random(),
                 type: 'circle',
@@ -118,7 +126,7 @@ const App = () => {
                 },
                 paint: {
                     'circle-radius': 10,
-                    'circle-color': '#f30'
+                    'circle-color': pointColor
                 }
             });
         };
