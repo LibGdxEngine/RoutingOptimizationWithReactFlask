@@ -8,13 +8,14 @@ mapboxgl.accessToken = 'pk.eyJ1Ijoicm9oaXRpaWMiLCJhIjoiY2t2eGkyanJ3Y2c2azMwczdtO
 const App = () => {
     const mapContainer = useRef(null);
     const map = useRef(null);
-    const [lng, setLng] = useState(54.365278);
-    const [lat, setLat] = useState(24.467791);
+    const [lng, setLng] = useState(54.363816);
+    const [lat, setLat] = useState(24.463347);
     const [zoom, setZoom] = useState(12);
     const start = [lng, lat];
     const [selectedPoints, setSelectedPoints] = useState([]);
     const redColor = "#f30";
     const greenColor = "#2dc506";
+
     useEffect(() => {
         if (map.current) return; // initialize map only once
         map.current = new mapboxgl.Map({
@@ -93,7 +94,6 @@ const App = () => {
         });
     }, [map.current]);
 
-
     useEffect(() => {
         const handleMapClick = (event) => {
             const coords = Object.keys(event.lngLat).map((key) => event.lngLat[key]);
@@ -134,15 +134,24 @@ const App = () => {
         map.current.once('click', handleMapClick);
     }, [selectedPoints]);
 
+    const getDistanceMatrix = async (points) => {
+        let my_points = points.join(';');
+        console.log(my_points);
+        const response = await fetch(`https://api.mapbox.com/directions-matrix/v1/mapbox/driving/${my_points}?&access_token=pk.eyJ1IjoiYWhtZWRmYXRoeXphaW4iLCJhIjoiY2w4YzZ0Z2U2MGptdjN2bXJlbnY4MTBvMiJ9.Luaz1LmJCCPD72lY3MKNZA&annotations=distance`)
+        const json = await response.json();
+        return json
+    }
 
-    async function getRoute(end) {
+    async function getRoute(start_point, end_point) {
         const query = await fetch(
-            `https://api.mapbox.com/directions/v5/mapbox/driving/${start[0]},${start[1]};${end[0]},${end[1]}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`,
+            `https://api.mapbox.com/directions/v5/mapbox/driving/${start_point[0]},${start_point[1]};${end_point[0]},${end_point[1]}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`,
             {method: 'GET'}
         );
         const json = await query.json();
         const data = json.routes[0];
         const route = data.geometry.coordinates;
+        let randomColor = Math.floor(Math.random() * 16777215).toString(16);
+        // let randomColor = "3887be";
         const geojson = {
             type: 'Feature',
             properties: {},
@@ -164,8 +173,8 @@ const App = () => {
                 'line-cap': 'round'
             },
             paint: {
-                'line-color': '#3887be',
-                'line-width': 5,
+                'line-color': "#" + randomColor,
+                'line-width': 3,
                 'line-opacity': 0.75
             }
         });
@@ -180,30 +189,71 @@ const App = () => {
         }
         instructions.innerHTML += `<p><strong>Trip duration: ${Math.floor(
             data.duration / 60
-        )} min 🚴 </strong></p><ol>${tripInstructions}</ol>`;
+        )} min 🚗 </strong></p><ol>${tripInstructions}</ol>`;
 
     }
 
+    function drawStraightLine(route) {
+        const geojson = {
+            type: 'Feature',
+            properties: {},
+            geometry: {
+                type: 'LineString',
+                coordinates: route
+            }
+        };
+
+        map.current.addLayer({
+            id: 'route' + Math.random(),
+            type: 'line',
+            source: {
+                type: 'geojson',
+                data: geojson
+            },
+            layout: {
+                'line-join': 'round',
+                'line-cap': 'round'
+            },
+            paint: {
+                'line-color': "#000000",
+                'line-width': 3,
+                'line-opacity': 0.3,
+                'line-dasharray': [2, 2],
+            }
+        });
+    }
+
     const handleRouteBtnClick = async (event) => {
-            try {
-                fetch("/points", {method: 'POST', body: selectedPoints}).then((res) =>
+        let routes_list;
+        try {
+            getDistanceMatrix([start, ...selectedPoints]).then((data) => {
+                fetch("/points", {method: 'POST', body: data['distances']}).then((res) =>
                     res.json().then((data) => {
                         // Setting a data from api
-                        console.log(data);
+                        routes_list = data['routes'][0];
+                        const points_list = [start, ...selectedPoints]
+
+                        for (let counter = 0; counter < points_list.length - 1; counter += 1) {
+                            if (counter % 2 === 0) {
+                                const start_point = points_list[routes_list[counter]];
+                                const end_point = points_list[routes_list[counter + 1]];
+                                getRoute(start_point, end_point);
+                            } else {
+                                const start_point = points_list[routes_list[counter]];
+                                const end_point = points_list[routes_list[counter + 1]];
+                                drawStraightLine([start_point, end_point]);
+                            }
+                        }
+
                     })
                 );
-            } catch
-                (err) {
-                console.log(err.message + " Exception error");
-            }
+            });
 
-            for (let counter = 0; counter < selectedPoints.length; counter += 1) {
-                const coords = [...selectedPoints[counter]];
-                console.log(coords);
-                getRoute(coords);
-            }
+        } catch
+            (err) {
+            console.log(err.message + " Exception error");
         }
-    ;
+    };
 
     return (
         <>
