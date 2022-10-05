@@ -15,7 +15,6 @@ def points():
     selected_points = [float(i) for i in selected_points]
     if len(selected_points) <= 2:
         return {"routes": "Select points before routing!"}
-    print(selected_points, type(selected_points), len(selected_points))
     matrix_rows = matrix_columns = math.sqrt(len(selected_points))
     distance_matrix = np.array(selected_points, np.float64).reshape(int(matrix_rows), int(matrix_columns))
     print(distance_matrix)

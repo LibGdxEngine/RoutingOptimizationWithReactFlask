@@ -1,0 +1,43 @@
+{
+  "$schema": "input.schema.json",
+  "$id": "input.schema.json",
+  "title": "Input",
+  "description": "Data to initialize routing optimization",
+  "type": "object",
+  "properties": {
+    "inspectors": {
+      "description": "Inspectors from the authority conduct regular food establishment inspections",
+      "$ref": "inspector.schema.json"
+    },
+    "tasks": {
+      "description": "Inspectors from the authority conduct regular food establishment inspections",
+      "$ref": "task.schema.json"
+    },
+    "constrains": {
+      "description": "Constrains and rules used in routing optimization problem",
+      "properties": {
+        "optimization": {
+          "oneOf": [
+            "distance",
+            "time"
+          ]
+        },
+        "schedulingMode": {
+          "description": "if timeSpan mode is selected you need to provide number of days to schedule tasks in, otherwise choose mode auto",
+          "type": "string",
+          "oneOf": ["timeSpan", "auto"]
+        },
+        "schedulingDays": {
+          "description": "Number of days to schedule tasks in, Only if scheduling mode is timeSpan",
+          "type": "integer"
+        },
+        "required": ["optimization","schedulingMode"]
+      }
+    },
+    "required": [
+      "inspectors",
+      "tasks",
+      "constrains"
+    ]
+  }
+}

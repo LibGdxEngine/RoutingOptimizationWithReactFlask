@@ -1,0 +1,64 @@
+{
+  "inspectors": [
+    {
+      "inspectorID": 1,
+      "serviceTime": 10,
+      "startPoint": {
+        "latitude": 90,
+        "longitude": 180
+      },
+      "category": "Food Poisoning",
+      "tasks": [
+        201,
+        202,
+        203,
+        204,
+        205
+      ],
+      "breakTime": 1.5
+    },
+    {
+      "inspectorID": 2,
+      "serviceTime": 10,
+      "startPoint": {
+        "latitude": 80,
+        "longitude": 100
+      },
+      "category": "Complaints",
+      "tasks": [
+        301,
+        302,
+        303,
+        304,
+        305
+      ],
+      "breakTime": 1.5
+    }
+  ],
+  "tasks": [
+    {
+      "taskID": 1,
+      "name": "task1",
+      "type": "Complaints",
+      "priority": 4,
+      "location": {
+        "latitude": 85,
+        "longitude": 90
+      }
+    },
+    {
+      "taskID": 2,
+      "name": "task2",
+      "type": "Food Poisoning",
+      "priority": 9,
+      "location": {
+        "latitude": 80,
+        "longitude": 180
+      }
+    }
+  ],
+  "constrains": {
+    "optimization": "time",
+    "schedulingMode": "auto"
+  }
+}

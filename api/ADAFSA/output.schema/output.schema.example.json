@@ -1,0 +1,80 @@
+{
+  "routing": [
+    {
+      "inspectorID": 1,
+      "optimalRoute": [
+        {
+          "taskID": 100,
+          "taskOrder": 1,
+          "dayNumber": 1,
+          "timeFrom": "",
+          "timeTo": ""
+        },
+        {
+          "taskID": 102,
+          "taskOrder": 2,
+          "dayNumber": 1,
+          "timeFrom": "10:30",
+          "timeTo": "11:00"
+        },
+        {
+          "taskID": 102,
+          "taskOrder": 3,
+          "dayNumber": 1,
+          "timeFrom": "13:00",
+          "timeTo": "13:30"
+        },
+        {
+          "taskID": 103,
+          "taskOrder": 4,
+          "dayNumber": 2,
+          "timeFrom": "14:00",
+          "timeTo": "15:00"
+        },
+        {
+          "taskID": 104,
+          "taskOrder": 5,
+          "dayNumber": 2,
+          "timeFrom": "16:00",
+          "timeTo": "17:00"
+        }
+      ]
+    },
+    {
+      "inspectorID": 2,
+      "optimalRoute": [
+        {
+          "taskID": 200,
+          "taskOrder": 1,
+          "timeFrom": "",
+          "timeTo": ""
+        },
+        {
+          "taskID": 202,
+          "taskOrder": 2,
+          "timeFrom": "10:30",
+          "timeTo": "11:00"
+        },
+        {
+          "taskID": 202,
+          "taskOrder": 3,
+          "timeFrom": "13:00",
+          "timeTo": "13:30"
+        },
+        {
+          "taskID": 203,
+          "taskOrder": 4,
+          "timeFrom": "14:00",
+          "timeTo": "15:00"
+        },
+        {
+          "taskID": 204,
+          "taskOrder": 5,
+          "timeFrom": "16:00",
+          "timeTo": "17:00"
+        }
+      ]
+    }
+  ],
+  "schedulingDays": 2
+}

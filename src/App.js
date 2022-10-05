@@ -10,7 +10,7 @@ const App = () => {
     const map = useRef(null);
     const [lng, setLng] = useState(54.363816);
     const [lat, setLat] = useState(24.463347);
-    const [zoom, setZoom] = useState(12);
+    const [zoom, setZoom] = useState(13);
     const start = [lng, lat];
     const [selectedPoints, setSelectedPoints] = useState([]);
     const redColor = "#f30";
@@ -142,6 +142,14 @@ const App = () => {
         return json
     }
 
+    function getDarkColor() {
+        var color = '#';
+        for (var i = 0; i < 6; i++) {
+            color += Math.floor(Math.random() * 10);
+        }
+        return color;
+    }
+
     async function getRoute(start_point, end_point) {
         const query = await fetch(
             `https://api.mapbox.com/directions/v5/mapbox/driving/${start_point[0]},${start_point[1]};${end_point[0]},${end_point[1]}?steps=true&geometries=geojson&access_token=${mapboxgl.accessToken}`,
@@ -173,7 +181,7 @@ const App = () => {
                 'line-cap': 'round'
             },
             paint: {
-                'line-color': "#" + randomColor,
+                'line-color': getDarkColor(),
                 'line-width': 3,
                 'line-opacity': 0.75
             }

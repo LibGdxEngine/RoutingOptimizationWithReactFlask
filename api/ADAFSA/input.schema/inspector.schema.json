@@ -1,0 +1,56 @@
+{
+  "$schema": "inspectors.schema.json",
+  "$id": "inspector.schema",
+  "title": "inspector",
+  "description": "inspector from the authority conduct regular food establishment inspections",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "inspectorID": {
+        "description": "The unique identifier for an inspector",
+        "type": "integer"
+      },
+      "startPoint": {
+        "description": "The depot point of the inspector",
+        "$ref": "location.schema.json"
+      },
+      "serviceTime": {
+        "description": "The daily work time for each inspector",
+        "type": "number",
+        "exclusiveMinimum": 0
+      },
+      "category": {
+        "description": "Category type of inspector",
+        "type": "string",
+        "oneOf": [
+          "Food Poisoning",
+          "NOC Inspection/Temp NOC",
+          "Complaints",
+          "Direct Inspection",
+          "Campaign Inspection",
+          "Follow up/ Temp Follow up",
+          "Routine Inspection/ Supervisory/Temp Routine"
+        ]
+      },
+      "breakTime": {
+        "description": "The daily break time for each inspector",
+        "type": "number",
+        "exclusiveMinimum": 0
+      },
+      "tasks": {
+        "description": "Tasks IDs that are assigned to this inspector",
+        "type": "array",
+        "items": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "inspectorID",
+        "serviceTime",
+        "category",
+        "tasks"
+      ]
+    }
+  }
+}

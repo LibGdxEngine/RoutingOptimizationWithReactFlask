@@ -1,0 +1,40 @@
+{
+  "$schema": "task.schema.json",
+  "$id": "task.schema",
+  "title": "task",
+  "description": "Inspection tasks",
+  "type": "object",
+  "items": {
+    "type": "object",
+    "properties": {
+      "taskID": {
+        "description": "The unique identifier for each task",
+        "type": "integer"
+      },
+      "name": {
+        "description": "The name of inspection area/task",
+        "type": "string"
+      },
+      "type": {
+        "description": "Category type of inspection task",
+        "type": "string"
+      },
+      "priority": {
+        "description": "The number that indicates task priority",
+        "type": "number",
+        "minimum": 0,
+        "maximum": 10
+      },
+      "location": {
+        "description": "The exact location of inspection task",
+        "$ref": "location.schema.json"
+      }
+    },
+    "required": [
+      "taskID",
+      "type",
+      "priority",
+      "location"
+    ]
+  }
+}

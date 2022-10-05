@@ -1,0 +1,67 @@
+{
+  "$schema": "output.schema.json",
+  "$id": "output.schema",
+  "title": "Output",
+  "description": "Routing optimization result",
+  "type": "object",
+  "properties": {
+    "routing": {
+      "description": "Scheduling and routing for each individual inspector",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "inspectorID": {
+            "description": "The unique identifier of inspector",
+            "type": "integer"
+          },
+          "optimalRoute": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "taskID": {
+                  "description": "The unique identifier for each task",
+                  "type": "integer"
+                },
+                "taskOrder": {
+                  "description": "The order of the task in routing",
+                  "type": "integer"
+                },
+                "dayNumber": {
+                  "description": "Number of day of inspection task"
+                  "type": "integer"
+                },
+                "timeFrom": {
+                  "description": "Start time of the task",
+                  "type": "string"
+                },
+                "timeTo": {
+                  "description": "End time of the task",
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "if input.schedulingMode == timeSpan": {
+      "droppedTasks": {
+        "comment": "Will be available only if schedulingMode is timeSpan",
+        "description": "Tasks with no assignment delayed for another patch",
+        "type": "array",
+        "items": {
+          "type": "integer"
+        }
+      }
+    },
+    "if input.schedulingMode == auto": {
+      "schedulingDays": {
+        "comment": "Will be available only if schedulingMode is auto",
+        "description": "Number of days required to perform all inspection tasks",
+        "type": "integer"
+      }
+    }
+  }
+}
