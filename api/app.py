@@ -9,6 +9,10 @@ app = Flask(__name__)
 
 @app.route('/points', methods=['GET', 'POST'])
 def points():
+    """"
+    https://ip/points
+    takes a 2D array of points as distance matrix and return the optimized route for these points.
+    """
     selected_points = str(request.data).split(',')
     selected_points[0] = selected_points[0][2:]
     selected_points[-1] = selected_points[-1].replace("'", '')

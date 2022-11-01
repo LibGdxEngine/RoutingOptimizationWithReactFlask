@@ -1,64 +1,56 @@
 {
-  "inspectors": [
+
+  "resources": [
     {
-      "inspectorID": 1,
-      "serviceTime": 10,
-      "startPoint": {
-        "latitude": 90,
-        "longitude": 180
+      "resourceID": 1,
+      "types": ["Food Poisoning"],
+      "constraints" : {
+          "serviceTime" : 10 --hours
+          "capacity" :   6,
+          "startPoint": {
+            "latitude": 90,
+            "longitude": 180
+          },
+          "endPoint": {
+            "latitude": 90,
+            "longitude": 180
+          },
+          "breakTime": 1.5,
+          "timeWindow" : { from : "9" , to : "12" }
       },
-      "category": "Food Poisoning",
-      "tasks": [
+      "tasks": [// this mabye not included incase no need to define a specifc tasks for each driver
         201,
         202,
         203,
         204,
-        205
+        2057
       ],
-      "breakTime": 1.5
-    },
-    {
-      "inspectorID": 2,
-      "serviceTime": 10,
-      "startPoint": {
-        "latitude": 80,
-        "longitude": 100
-      },
-      "category": "Complaints",
-      "tasks": [
-        301,
-        302,
-        303,
-        304,
-        305
-      ],
-      "breakTime": 1.5
     }
   ],
   "tasks": [
     {
       "taskID": 1,
       "name": "task1",
-      "type": "Complaints",
-      "priority": 4,
-      "location": {
-        "latitude": 85,
-        "longitude": 90
-      }
-    },
-    {
-      "taskID": 2,
-      "name": "task2",
-      "type": "Food Poisoning",
-      "priority": 9,
-      "location": {
-        "latitude": 80,
-        "longitude": 180
+      "types": ["Food Poisoning"],
+      "constraints" : {
+          "priority": 4,
+          "serviceTime" : .5,  -- hours
+          "load" : 1 -- the unit will be anything
+          "location": {
+            "latitude": 85,
+            "longitude": 90
+          },
+          "timeWindow" : { from : "9" , to : "12" }
       }
     }
   ],
   "constrains": {
-    "optimization": "time",
-    "schedulingMode": "auto"
+    "optimization": "distance",
+    "schedulingMode": "auto" or "time",
+    "scheduleDuration" : 5 -- unit days
   }
 }
+
+
+
+

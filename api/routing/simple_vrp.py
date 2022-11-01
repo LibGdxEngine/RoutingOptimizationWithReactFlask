@@ -15,9 +15,13 @@ from scipy.spatial import distance_matrix
 
 
 def create_data_model(distance_matrix):
-    """Stores the data for the problem."""
+    """
+    Stores the data needed to solve the VRP problem.
+    such as (Distance Matrix), (number of vehicles) and (starting point\s -> (depot))
+    """
     data = {}
     data['distance_matrix'] = distance_matrix
+    """pre-process the distance matrix to create custom routing behavior"""
     data['distance_matrix'] = process_distance_matrix(data['distance_matrix'])
     data['num_vehicles'] = 1
     data['depot'] = 0
@@ -25,22 +29,37 @@ def create_data_model(distance_matrix):
 
 
 def generate_distance_matrix(points):
+    """
+    can be used to generate distance matrix from (x, y) list of points or (lat, long) array
+    :param points:
+    :return: 2D array (distance matrix)
+    """
+    # generate fake titles for each column in the dataframe
     ctys = ['E40'] * len(points)
     df = pd.DataFrame(points, columns=['xcord', 'ycord'], index=ctys)
     dm = pd.DataFrame(distance_matrix(df.values, df.values), index=df.index, columns=df.index)
+    # make distance matrix values a bit bigger to make sure we can optimize it.
     dm = dm * 1000
+    # convert our dataframe to numpy array to remove fake titles and indexing
     dm = pd.DataFrame(dm).astype(int).to_numpy()
     return dm
 
 
 def process_distance_matrix(dis_matrix):
+    """
+    pre-process distance matrix to make sure that every vehicle go from one starting points to
+    its associated exit point.
+
+    the distance matrix is transformed in a way that makes every:
+    entry point values -> all points are high except its exit.
+    exit point values -> all entry points except the one it came from
+    """
+
+    # check if the current point is entry point else it is exit point
     def is_entry(index):
         return index % 2 == 0
 
-    """
-    entry -> all points are high except it's exit
-    exit -> all entry points except the one it came from
-    """
+    # distance matrix transformation logic
     for r_index, row in enumerate(dis_matrix):
         for c_index, column in enumerate(row):
             if r_index == c_index or (is_entry(r_index) and (c_index - r_index) == 1):
@@ -54,7 +73,7 @@ def process_distance_matrix(dis_matrix):
 
 def get_routes(solution, routing, manager):
     """Get vehicle routes from a solution and store them in an array."""
-    # Get vehicle routes and store them in a two dimensional array whose
+    # Get vehicle routes and store them in a two-dimensional array whose
     # i,j entry is the jth location visited by vehicle i along its route.
     routes = []
     for route_nbr in range(routing.vehicles()):
@@ -91,7 +110,10 @@ def print_solution(data, manager, routing, solution):
 
 
 def find_best_route_for(distance_matrix):
-    """Entry point of the program."""
+    """
+    :param distance_matrix:
+    :return: the optimized ordered list of points to visit.
+    """
     # Instantiate the data problem.
     data = create_data_model(distance_matrix)
 
